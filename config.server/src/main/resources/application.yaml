@@ -1,0 +1,13 @@
+server:
+  port: 8085
+
+# Here we have provided the common configurations in properties file over github server using config-server
+# Now we can directly use these configurations in our services using config-client
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Ankitkr6162/microservices-config-server
+          clone-on-start: true

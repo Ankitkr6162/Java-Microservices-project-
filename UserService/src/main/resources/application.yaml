@@ -24,6 +24,55 @@ spring:
     import: configserver:http://localhost:8085
 
 
+#Actuator properties
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+  endpoint:
+    health:
+      show-details: always
+
+
+
+#Circuit breaker properties
+resilience4j:
+  circuitbreaker:
+    instances:
+      ratingHotelBreaker:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 6s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+
+
+  retry:
+    instances:
+      ratingHotelService:
+        max-attempts: 3
+        wait-duration: 5s
+
+  rateLimiter:
+    instances:
+      userRateLimiter:
+        limit-refresh-period: 4s
+        timeout-duration: 2s
+        limit-for-period: 2
+
+
+
+
+
 #This property is mentioned in the config server, we have used above property to enable the config server
 #spring.config.import
 
